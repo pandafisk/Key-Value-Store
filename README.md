@@ -1,6 +1,6 @@
 # Key-Value-Store
 
-To run the code, compile both `kv_db` and `db`.
+To run the code, compile both `db` and `db_server`.
 
 
 #### Instructions
