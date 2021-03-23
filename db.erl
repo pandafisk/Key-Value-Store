@@ -29,7 +29,7 @@ delete(Key) ->
 
 %% @doc Returns the length of the database.
 len() ->
-  io:format( "INFO:~n   Server has ~w key(s) ~n", [length(gen_server:call(?MODULE, len))]).
+  io:format( "INFO:~n  Server has ~w key(s) ~n", [length(gen_server:call(?MODULE, len))]).
 
 % gen_server callbacks
 
