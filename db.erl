@@ -4,12 +4,12 @@
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
--export([start/0, put/2, get/1, delete/1, len/0]).
+-export([start/0, stop/0, put/2, get/1, delete/1, len/0]).
 
 % public functions
 
 start() ->
-  gen_server:start({local, db}, ?MODULE, [], []).
+  gen_server:start_link({global, db}, ?MODULE, [], []).
 
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
@@ -30,6 +30,10 @@ delete(Key) ->
 %% @doc Returns the length of the database.
 len() ->
   io:format( "INFO:~n  Server has ~w key(s) ~n", [length(gen_server:call(?MODULE, len))]).
+
+
+stop() ->
+  gen_server:stop(?MODULE).
 
 % gen_server callbacks
 
