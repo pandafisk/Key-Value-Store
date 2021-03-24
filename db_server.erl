@@ -1,5 +1,5 @@
 % Defines the module.
--module(kv_db_server).
+-module(db_server).
 
 % Makes the module implement the gen_server behaviour.
 -behaviour(gen_server).
