@@ -1,11 +1,11 @@
--module(kv_db).
+-module(db).
 
 -type db() :: [].
 -type results() :: nonempty_list({Key::atom(), Value::term()}).
 -type err() :: {'error', string()}.
 
 -export_type([db/0, results/0, err/0]).
--export([new/0, put/3, get/2, delete/2, len/1]).
+-export([new/0, put/3, get/2, delete/2, ls/1]).
 
 -spec new() -> db().
 new() -> [].
@@ -34,6 +34,6 @@ delete(Key, [{Key, _Value} | Db]) ->
 delete(Key, [Tuple | Db]) ->
   [Tuple | delete(Key, Db)].
 
--spec len(db()) -> [{atom(), term()},...] | nil().
-len(Db) ->
+-spec ls(db()) -> [{atom(), term()},...] | nil().
+ls(Db) ->
   Db.
