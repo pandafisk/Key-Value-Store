@@ -1,5 +1,4 @@
 -module(kv_db_client).
--author("Shihab").
 
 -export([create/2, update/2, getValueByKey/1, deleteValueByKey/1, totalNumberOfKey/0]).
 
