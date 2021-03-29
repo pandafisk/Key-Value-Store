@@ -17,7 +17,7 @@
 
 start() ->
   gen_server:start({local, kv_db_server}, ?MODULE, [], []).
-
+  % gen_server:start_link(?MODULE, [], []).
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
 put(Key, Value) ->
@@ -42,7 +42,8 @@ size() ->
   io:format( "INFO:~n  DB Server has ~w key(s) ~n", [length(gen_server:call(?MODULE, ls))]).
 
 stop() ->
-  gen_server:stop(?MODULE).
+  gen_server:stop(?MODULE),
+  io:format("Server has stopped. ~n").
 
 % gen_server callbacks
 
@@ -56,6 +57,7 @@ stop() ->
 %
 % It returns {ok, State} where is the internal state of the gen_server.
 init(_Args) ->
+  process_flag(trap_exit, true),
   {ok, kv_db:new()}.
 
 % Module:handle_call(Request, From, State) -> Result
@@ -70,7 +72,7 @@ init(_Args) ->
 % State is the internal state of the gen_server.
 %
 % For this particular message {put, Key, Value}, a new key-value pair
-% is added to the database adn then we're returning a tuple
+% is added to the database and then we're returning a tuple
 % {reply, Reply, NewState} where Reply is what will be given back to From
 % and NewState is the gen server's new state.
 handle_call({put, Key, Value}, _From, State) ->
