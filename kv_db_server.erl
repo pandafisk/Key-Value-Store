@@ -10,14 +10,19 @@
 
 % Exports public functions that will ease interaction
 % with the gen server.
--export([start/0, put/2, get/1, delete/1, ls/0, size/0, stop/0]).
+-export([start_link/0, put/2, get/1, delete/1, ls/0, size/0, stop/0]).
 
+-define(SERVER, ?MODULE).
 
 % public functions
 
-start() ->
-  gen_server:start({local, kv_db_server}, ?MODULE, [], []).
+start_link() ->
+  % gen_server:start({local, ?MODULE}, ?MODULE, [], []). % working successfully with and without supervisor but only 1 worker can be created
+  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []). % working successfully with and without supervisor but only 1 worker can be created
   % gen_server:start_link(?MODULE, [], []).
+
+
+
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
 put(Key, Value) ->
@@ -56,8 +61,9 @@ stop() ->
 % we're just ignoring it prefixing an underscore to the variable.
 %
 % It returns {ok, State} where is the internal state of the gen_server.
-init(_Args) ->
+init([]) ->
   process_flag(trap_exit, true),
+  % io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
   {ok, kv_db:new()}.
 
 % Module:handle_call(Request, From, State) -> Result
