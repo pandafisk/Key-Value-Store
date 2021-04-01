@@ -26,6 +26,7 @@ start_link() ->
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
 put(Key, Value) ->
+  %io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
   gen_server:call(?MODULE, {put, Key, Value}).
 
 %% @doc Fetches `Value` for a given `Key` where `Value` 
@@ -82,6 +83,7 @@ init([]) ->
 % {reply, Reply, NewState} where Reply is what will be given back to From
 % and NewState is the gen server's new state.
 handle_call({put, Key, Value}, _From, State) ->
+  io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
   NewState = kv_db:put(Key, Value, State),
   {reply, NewState, NewState};
 handle_call({get, Key}, _From, State) ->
