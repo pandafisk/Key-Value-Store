@@ -10,12 +10,12 @@ start_link_from_shell() ->
   {ok, Pid} = supervisor:start_link({local, ?SERVER}, ?MODULE, []),
   unlink(Pid).
 start_link()->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+    supervisor:start_link({local, ?SERVER}, ?MODULE, []). %If the code doesn't work: change ?SERVER to ?MODULE.
 
 init([]) ->
      io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
 
-     RestartStrategy = {simple_one_for_one, 10, 60},
+     RestartStrategy = {one_for_one, 10, 60},
      
      ChildSpec = {
                   kv_db_server_proc,
