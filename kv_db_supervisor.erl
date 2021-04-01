@@ -15,7 +15,7 @@ start_link()->
 init([]) ->
      io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
 
-     RestartStrategy = {one_for_one, 10, 60},
+     RestartStrategy = {simple_one_for_one, 10, 60},
      
      ChildSpec = {
                   kv_db_server_proc,
