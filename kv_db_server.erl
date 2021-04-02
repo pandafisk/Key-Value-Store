@@ -17,16 +17,15 @@
 % public functions
 
 start_link() ->
-  % gen_server:start({local, ?MODULE}, ?MODULE, [], []). % working successfully with and without supervisor but only 1 worker can be created
   gen_server:start_link({local, ?MODULE}, ?MODULE, [], []). % working successfully with and without supervisor but only 1 worker can be created
-  % gen_server:start_link(?MODULE, [], []).
-
+  % gen_server:start_link(?MODULE, [], []). % Can create multiple child but DB doesnt work
+  % gen_server:start({local, ?SERVER}, ?MODULE, []).
 
 
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
 put(Key, Value) ->
-  %io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
+  %io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
   gen_server:call(?MODULE, {put, Key, Value}).
 
 %% @doc Fetches `Value` for a given `Key` where `Value` 
@@ -64,7 +63,7 @@ stop() ->
 % It returns {ok, State} where is the internal state of the gen_server.
 init([]) ->
   process_flag(trap_exit, true),
-  % io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
+  io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
   {ok, kv_db:new()}.
 
 % Module:handle_call(Request, From, State) -> Result
@@ -83,7 +82,7 @@ init([]) ->
 % {reply, Reply, NewState} where Reply is what will be given back to From
 % and NewState is the gen server's new state.
 handle_call({put, Key, Value}, _From, State) ->
-  io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
+  io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
   NewState = kv_db:put(Key, Value, State),
   {reply, NewState, NewState};
 handle_call({get, Key}, _From, State) ->

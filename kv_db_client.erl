@@ -7,7 +7,7 @@
 % stop() ->
 %     kv_db_server:stop().
 create(Key, Value) ->
-    %io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
+    io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
     kv_db_server:put(Key, Value).
 
 update(Key, Value) ->
