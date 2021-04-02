@@ -1,4 +1,4 @@
--module(kv_db_supervisor).
+-module(kv_db_supervisor_simple).
 -behaviour(supervisor).
 
 -export([start_link/0, start_link_from_shell/0, addReplica/1, removeReplica/1, replicaDetails/0]).
