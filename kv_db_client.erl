@@ -13,6 +13,7 @@ create(Key, Value) ->
 
 update(Key, Value) ->
     kv_db_supervisor:startChild(Key),
+    db_server:delete(Key, Key),
     db_server:put(Key, Value, Key),
     kv_db_supervisor:stopChild(Key).
 
