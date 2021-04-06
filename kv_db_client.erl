@@ -35,10 +35,10 @@ countKeys(Key) ->
 
 
 
-%% erl -sname 'name' -setcookies 1234
+%% erl -sname 'server' -setcookies 1234
 %% kv_db_supervisor:start_link_from_shell().
 
 %%=========== In another shell ==============
-%% erl -sname 'name2' -setcookies 1234
+%% erl -sname 'client' -setcookies 1234
 %% rpc:call('name', kv_db_client, 'method', [Args]).
  

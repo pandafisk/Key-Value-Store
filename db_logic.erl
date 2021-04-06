@@ -38,6 +38,7 @@ get(Key) ->
 
 delete(Key) ->
     Query = 
-        fun() -> mnesia:delete({kv_db, Key}) end,
+        fun() -> mnesia:delete({kv_db, Key}) 
+        end,
     {atomic, Results} = mnesia:transaction(Query),
     Results.
