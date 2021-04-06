@@ -24,3 +24,5 @@ _checkouts/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+*.DAT
+*.LOG
