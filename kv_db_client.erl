@@ -30,8 +30,9 @@ delete(Key) ->
 
 countKeys(Key) ->
     kv_db_supervisor:startChild(Key),
-    db_server:size(),
-    kv_db_supervisor:stopChild(Key).
+    Size = db_server:size(Key),
+    kv_db_supervisor:stopChild(Key),
+    Size.
 
 
 
