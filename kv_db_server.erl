@@ -27,12 +27,13 @@ start(Name) ->
 %% @doc Adds a key-value pair to the database where `Key` is an atom()
 %% and `Value` is a term().
 put(Key, Value) ->
-  % io:format("~p (~p) starting... ~n", [{global, ?MODULE}, self()]),
+  io:format("~p (~p) Server Call Put... ~n", [{global, ?MODULE}, self()]),
   gen_server:call(?MODULE, {put, Key, Value}).
 
 %% @doc Fetches `Value` for a given `Key` where `Value` 
 %% is a term() and `Key` is an atom().
 get(Key) ->
+  io:format("~p (~p) Server Call Get... ~n", [{global, ?MODULE}, self()]),
   gen_server:call(?MODULE, {get, Key}).
 
 %% @doc Deletes a key-value pair from the database.
@@ -84,10 +85,11 @@ init([]) ->
 % {reply, Reply, NewState} where Reply is what will be given back to From
 % and NewState is the gen server's new state.
 handle_call({put, Key, Value}, _From, State) ->
-  % io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
+  io:format("~p (~p) Server Call 2 Put... ~n", [{local, ?MODULE}, self()]),
   NewState = kv_db:put(Key, Value, State),
   {reply, NewState, NewState};
 handle_call({get, Key}, _From, State) ->
+  io:format("~p (~p) Server Call 2 Get... ~n", [{global, ?MODULE}, self()]),
   {reply, kv_db:get(Key, State), State};
 handle_call({delete, Key}, _From, State) ->
   NewState = kv_db:delete(Key, State),

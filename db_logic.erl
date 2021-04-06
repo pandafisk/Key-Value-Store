@@ -1,19 +1,23 @@
 -module(db_logic).
 
--export([initDB/0, put/2, get/1, delete/1]).
+-export([init/0, put/2, get/1, delete/1]).
 
 -record(kv_db,{key, value}).
 
-initDB() ->
-    mnesia:create_schema([node()]),
+init() ->
+    mnesia:create_schema([]),
     mnesia:start(),
     try
+        io:format("try~n"),
+        % mnesia:start()
         mnesia:table_info(type, kv_db)
+      
     catch
         exit: _ ->
-            mnesia:create_table(kv_db, [{attributes, record_info(fields, kv_db)}])
-            % {type, bag},
-            % {disc_copies, [node()]}
+            mnesia:create_table(kv_db, [{attributes, record_info(fields, kv_db)},
+            {type, bag},
+            {disc_copies, [node()]}]),
+            io:format("catch ~n")
     end.
 
 put(Key, Value) ->
@@ -22,17 +26,20 @@ put(Key, Value) ->
             key = Key,
             value = Value})
     end,
-    mnesia:transaction(Insert).
+   {atomic, Results} =  mnesia:transaction(Insert),
+   Results.
     % io:format("Results: ~p~n", [Results]).
 
 get(Key) ->
     Query = fun() -> 
         mnesia:match_object({kv_db, Key, '_'})
     end,
-    mnesia:transaction(Query).
+    {atomic, Results} = mnesia:transaction(Query),
+    Results.
     % io:format("Results: ~p~n", [Results]).
 
 delete(Key) ->
     Query = 
         fun() -> mnesia:delete({kv_db, Key}) end,
-    {atomic, _} = mnesia:transaction(Query). 
+    {atomic, Results} = mnesia:transaction(Query),
+    Results.

@@ -7,17 +7,17 @@
 % stop() ->
 %     kv_db_server:stop().
 create(Key, Value) ->
-    io:format("~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
-    kv_db_server:put(Key, Value).
+    io:format("Client Call: ~n~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
+    db_server:put(Key, Value).
 
 update(Key, Value) ->
-    kv_db_server:put(Key, Value).
+    db_server:put(Key, Value).
 
 getValueByKey(Key) ->
-    kv_db_server:get(Key).
+    db_server:get(Key).
 
 deleteValueByKey(Key) ->
-    kv_db_server:delete(Key).
+    db_server:delete(Key).
 
 totalNumberOfKey() ->
-    kv_db_server:size().
+    db_server:size().

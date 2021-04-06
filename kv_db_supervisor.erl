@@ -19,11 +19,11 @@ init([]) ->
      
      ChildSpec = {
                   kv_db_server_proc,
-                  {kv_db_server, start_link, []},
+                  {db_server, start_link, []},
                   permanent,
                   infinity,
                   supervisor,
-                  [kv_db_server]
+                  [db_server]
                 },
                 
     {ok, {RestartStrategy,[ChildSpec]}}.
@@ -31,11 +31,11 @@ init([]) ->
 startChild(ID) ->
   ChildSpec = {
                   ID,
-                  {kv_db_server, start, [ID]},
+                  {db_server, start, [ID]},
                   permanent, %We don't want the child_spec to be removed, so we can restrat it.
                   brutal_kill,
                   worker,
-                  [kv_db_server]
+                  [db_server]
                 },
   supervisor:start_child(?MODULE, ChildSpec).
 

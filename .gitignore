@@ -26,3 +26,5 @@ _checkouts/
 *.code-workspace
 *.DAT
 *.LOG
+*.DCD
+*.DCL
