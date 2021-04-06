@@ -1,11 +1,13 @@
 # Key-Value-Store
 
-To run the code, compile both `db` and `db_server`.
+To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` & `kv_db_supervisor`
 
 
 #### Instructions
-- `start/0`: Starts and initialises the DB
-- `put/2`: Adds, or updates a key-value pair in the DB.
-- `get/1`: Fetches the the value for a given key.
-- `delete/1`: Deletes a key-value pair from the DB, given the key.
-- `len/0`: Returns the length of the DB.
+To start the Key-value store, run `kv_db_supervisor:start_link_from_client()`.
+
+To interract with the DB, use the `kv_db_client`-file:
+- `create/2`: Creates a new entry in the DataBase.
+- `update/2`: Updates an entry in the DataBase.
+- `get/1`: Fetches the value from the given key.
+- `delete/1`: Deletes an entry with the given key.
