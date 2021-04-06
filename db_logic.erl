@@ -1,6 +1,6 @@
 -module(db_logic).
 
--export([init/0, put/2, get/1, delete/1]).
+-export([init/0, put/2, get/1, delete/1, size/0]).
 
 -record(kv_db,{key, value}).
 
@@ -42,3 +42,6 @@ delete(Key) ->
         end,
     {atomic, Results} = mnesia:transaction(Query),
     Results.
+
+size() ->
+    mnesia:table_info(kv_db, size).
