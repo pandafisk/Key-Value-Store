@@ -18,8 +18,9 @@ update(Key, Value) ->
 
 get(Key) ->
     kv_db_supervisor:startChild(Key),
-    db_server:get(Key),
-    kv_db_supervisor:stopChild(Key).
+    Value = db_server:get(Key, Key),
+    kv_db_supervisor:stopChild(Key),
+    Value.
 
 delete(Key) ->
     kv_db_supervisor:startChild(Key),

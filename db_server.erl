@@ -48,9 +48,9 @@ handle_call( {put, Key, Value}, _From, State) ->
     {reply, ok, State};
 
 handle_call({get, Key}, _From, State) ->
-    io:format("~p (~p) GET ~n",[?MODULE, self()]),
     Get = db_logic:get(Key),
     [{_, _, Value}] = Get,
+    io:format("~p (~p) GET ~p ~n",[?MODULE, self(), Value]),
     {reply, Value, State};
 
 handle_call({delete, Key}, _From, State) ->

@@ -8,7 +8,6 @@ init() ->
     mnesia:create_schema([]),
     mnesia:start(),
     try
-        io:format("try~n"),
         % mnesia:start()
         mnesia:table_info(type, kv_db)
       
@@ -16,8 +15,7 @@ init() ->
         exit: _ ->
             mnesia:create_table(kv_db, [{attributes, record_info(fields, kv_db)},
             {type, bag},
-            {disc_copies, [node()]}]),
-            io:format("catch ~n")
+            {disc_copies, [node()]}])
     end.
 
 put(Key, Value) ->
