@@ -13,7 +13,7 @@ create(Key, Value) ->
 
 update(Key, Value) ->
     kv_db_supervisor:startChild(Key),
-    db_server:put(Key, Value),
+    db_server:put(Key, Value, Key),
     kv_db_supervisor:stopChild(Key).
 
 get(Key) ->
@@ -24,7 +24,7 @@ get(Key) ->
 
 delete(Key) ->
     kv_db_supervisor:startChild(Key),
-    db_server:delete(Key),
+    db_server:delete(Key, Key),
     kv_db_supervisor:stopChild(Key).
 
 countKeys(Key) ->
@@ -33,3 +33,11 @@ countKeys(Key) ->
     kv_db_supervisor:stopChild(Key).
 
 
+
+%% erl -sname 'name' -setcookies 1234
+%% kv_db_supervisor:start_link_from_shell().
+
+%%=========== In another shell ==============
+%% erl -sname 'name2' -setcookies 1234
+%% rpc:call('name', kv_db_client, 'method', [Args]).
+ 
