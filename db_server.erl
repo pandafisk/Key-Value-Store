@@ -7,7 +7,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 %%Public
--export([put/2, get/1, delete/1]).
+-export([put/3, get/2, delete/2]).
 
 
 -record(state, {}).
@@ -22,14 +22,14 @@ start_link() ->
 start(Name) ->
   gen_server:start({local, Name}, ?MODULE, [], []).
 
-put(Key, Value) ->
-    gen_server:call(?MODULE, {put, Key, Value}).
+put(Key, Value, Node) ->
+    gen_server:call(Node, {put, Key, Value}).
 
-get(Key) ->
-    gen_server:call(?MODULE, {get, Key}).
+get(Key, Node) ->
+    gen_server:call(Node, {get, Key}).
 
-delete(Key) ->
-    gen_server:call(?MODULE, {delete, Key}).
+delete(Key, Node) ->
+    gen_server:call(Node, {delete, Key}).
 
 
 %% ============================================

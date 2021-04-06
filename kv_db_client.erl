@@ -1,23 +1,34 @@
 -module(kv_db_client).
 
--export([create/2, update/2, getValueByKey/1, deleteValueByKey/1, totalNumberOfKey/0]).
+-export([create/2, update/2, get/1, delete/1, countKeys/1]).
 
 % start() ->
 %     kv_db_server:start().
 % stop() ->
 %     kv_db_server:stop().
 create(Key, Value) ->
-    io:format("Client Call: ~n~p (~p) starting... ~n", [{local, ?MODULE}, self()]),
-    db_server:put(Key, Value).
+    kv_db_supervisor:startChild(Key),
+    db_server:put(Key, Value, Key),
+    kv_db_supervisor:stopChild(Key).
 
 update(Key, Value) ->
-    db_server:put(Key, Value).
+    kv_db_supervisor:startChild(Key),
+    db_server:put(Key, Value),
+    kv_db_supervisor:stopChild(Key).
 
-getValueByKey(Key) ->
-    db_server:get(Key).
+get(Key) ->
+    kv_db_supervisor:startChild(Key),
+    db_server:get(Key),
+    kv_db_supervisor:stopChild(Key).
 
-deleteValueByKey(Key) ->
-    db_server:delete(Key).
+delete(Key) ->
+    kv_db_supervisor:startChild(Key),
+    db_server:delete(Key),
+    kv_db_supervisor:stopChild(Key).
 
-totalNumberOfKey() ->
-    db_server:size().
+countKeys(Key) ->
+    kv_db_supervisor:startChild(Key),
+    db_server:size(),
+    kv_db_supervisor:stopChild(Key).
+
+

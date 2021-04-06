@@ -32,7 +32,7 @@ startChild(ID) ->
   ChildSpec = {
                   ID,
                   {db_server, start, [ID]},
-                  permanent, %We don't want the child_spec to be removed, so we can restrat it.
+                  temporary, %We don't want the child_spec to be removed, so we can restrat it.
                   brutal_kill,
                   worker,
                   [db_server]
@@ -40,6 +40,7 @@ startChild(ID) ->
   supervisor:start_child(?MODULE, ChildSpec).
 
 stopChild(ID) ->
+  
   supervisor:terminate_child(?MODULE, ID).
 
 restartChild(ID) ->
