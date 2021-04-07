@@ -5,7 +5,7 @@
 -record(kv_db,{key, value}).
 
 init() ->
-    mnesia:create_schema([node()]),
+    mnesia:create_schema([]),
     mnesia:start(),
     try
         % mnesia:start()
@@ -15,7 +15,7 @@ init() ->
         exit: _ ->
             mnesia:create_table(kv_db, [{attributes, record_info(fields, kv_db)},
             {type, bag},
-            {disc_copies, [nodes()]}])
+            {disc_copies, [node()]}])
     end.
 
 put(Key, Value) ->
