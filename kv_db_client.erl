@@ -1,6 +1,6 @@
 -module(kv_db_client).
 
--export([create/2, update/2, get/1, delete/1, countKeys/1]).
+-export([create/2, update/2, get/1, delete/1, countKeys/0]).
 
 % start() ->
 %     kv_db_server:start().
@@ -28,10 +28,10 @@ delete(Key) ->
     db_server:delete(Key, Key),
     kv_db_supervisor:stopChild(Key).
 
-countKeys(Key) ->
-    kv_db_supervisor:startChild(Key),
-    Size = db_server:size(Key),
-    kv_db_supervisor:stopChild(Key),
+countKeys() ->
+    kv_db_supervisor:startChild(?MODULE),
+    Size = db_server:size(?MODULE),
+    kv_db_supervisor:stopChild(?MODULE),
     Size.
 
 
