@@ -7,32 +7,32 @@
 % stop() ->
 %     kv_db_server:stop().
 create(Key, Value) ->
-    kv_db_supervisor:startChild(Key),
-    db_server:put(Key, Value, Key),
-    kv_db_supervisor:stopChild(Key).
+    % kv_db_supervisor:startChild(Key),
+    db_server:put(Key, Value, self()),
+    % kv_db_supervisor:stopChild(Key).
 
 update(Key, Value) ->
-    kv_db_supervisor:startChild(Key),
+    % kv_db_supervisor:startChild(Key),
     db_server:delete(Key, Key),
-    db_server:put(Key, Value, Key),
-    kv_db_supervisor:stopChild(Key).
+    db_server:put(Key, Value, self()),
+    % kv_db_supervisor:stopChild(Key).
 
 get(Key) ->
-    kv_db_supervisor:startChild(Key),
-    Value = db_server:get(Key, Key),
-    kv_db_supervisor:stopChild(Key),
-    Value.
+    % kv_db_supervisor:startChild(Key),
+    db_server:get(Key, self()),
+    % kv_db_supervisor:stopChild(Key),
+    % Value.
 
 delete(Key) ->
-    kv_db_supervisor:startChild(Key),
-    db_server:delete(Key, Key),
-    kv_db_supervisor:stopChild(Key).
+    % kv_db_supervisor:startChild(Key),
+    db_server:delete(Key, self()),
+    % kv_db_supervisor:stopChild(Key).
 
 countKeys() ->
-    kv_db_supervisor:startChild(?MODULE),
-    Size = db_server:size(?MODULE),
-    kv_db_supervisor:stopChild(?MODULE),
-    Size.
+    % kv_db_supervisor:startChild(?MODULE),
+    db_server:size(?MODULE),
+    % kv_db_supervisor:stopChild(?MODULE),
+    % Size.
 
 
 
