@@ -18,7 +18,7 @@ init([]) ->
      RestartStrategy = {one_for_one, 3, 3},
      
      ChildSpec = {
-                  kv_db_server_proc,
+                  db_server_proc,
                   {db_server, start_link, []},
                   permanent,
                   infinity,
