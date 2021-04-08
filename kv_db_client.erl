@@ -2,6 +2,8 @@
 
 -export([create/2, update/2, get/1, delete/1, countKeys/0]).
 
+-export([remote_create/3, remote_update/3, remote_get/2, remote_delete/2, remote_size/1]).
+
 % -------------------------------------------
 % Internal Calls
 % -------------------------------------------
@@ -56,10 +58,10 @@ remote_delete(Server, Key) ->
 remote_size(Server) ->
     rpc:call(Server, kv_db_client, countKeys, []).
 
+
 %% erl -sname 'server' -setcookies 1234
 %% kv_db_supervisor:start_link_from_shell().
 
 %%=========== In another shell ==============
 %% erl -sname 'client' -setcookies 1234
 %% rpc:call('name', kv_db_client, 'method', [Args]).
- 
