@@ -59,10 +59,9 @@ addReplica(NodeName) ->
     mnesia:change_table_copy_type(schema, NodeName, disc_copies),
     %To make new the node capable of storing disc copies
     mnesia:add_table_copy(kv_db, NodeName, disc_copies).
-
+%stop Mnesia on Nodename first and then call this method from any other running server node
 removeReplica(Nodename) ->
-    %login to the cluster to be removed
-    %stop mnesia
+    %Now switch to any other node in the cluster and do:
     mnesia:del_table_copy(schema, Nodename).
 
 
