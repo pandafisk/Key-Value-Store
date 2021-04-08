@@ -1,11 +1,6 @@
 -module(kv_db_client).
 
-%% Local
 -export([create/2, update/2, get/1, delete/1, countKeys/0]).
-
-%% Remote
--export([remoteCreate/2, remoteUpdate/2, remoteGet/1, remoteDelete/1, remoteSize/0]).
-
 
 % start() ->
 %     kv_db_server:start().
@@ -39,35 +34,6 @@ countKeys() ->
     kv_db_supervisor:stopChild(?MODULE),
     Size.
 
-
-%%==================================================
-%%              Remote Client
-%%==================================================
-
-remoteCreate(Key, Value) ->
-    Servers = mnesia:table_info(kv_db, where_to_write),
-    Server = lists:nth(rand:uniform(length(Servers)), Servers),
-    rpc:call(Server, kv_db_client, create, [Key, Value]).
-
-remoteUpdate(Key, Value) ->
-    Servers = mnesia:table_info(kv_db, where_to_write),
-    Server = lists:nth(rand:uniform(length(Servers)), Servers),
-    rpc:call(Server, kv_db_client, update, [Key, Value]).
-
-remoteGet(Key) ->
-    Servers = mnesia:table_info(kv_db, where_to_write),
-    Server = lists:nth(rand:uniform(length(Servers)), Servers),
-    rpc:call(Server, kv_db_client, get, [Key]).
-
-remoteDelete(Key) ->
-    Servers = mnesia:table_info(kv_db, where_to_write),
-    Server = lists:nth(rand:uniform(length(Servers)), Servers),
-    rpc:call(Server, kv_db_client, delete, [Key]).
-
-remoteSize() -> 
-    Servers = mnesia:table_info(kv_db, where_to_write),
-    Server = lists:nth(rand:uniform(length(Servers)), Servers),
-    rpc:call(Server, kv_db_client, countKeys, []).
 
 
 %% erl -sname 'server' -setcookies 1234
