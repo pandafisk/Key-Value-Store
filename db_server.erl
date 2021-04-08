@@ -22,17 +22,17 @@ start_link() ->
 start(Name) ->
   gen_server:start({local, Name}, ?MODULE, [], []).
 
-put(Key, Value, Node) ->
-    gen_server:call(Node, {put, Key, Value}).
+put(Key, Value) ->
+    gen_server:call(?MODULE, {put, Key, Value}).
 
-get(Key, Node) ->
-    gen_server:call(Node, {get, Key}).
+get(Key) ->
+    gen_server:call(?MODULE, {get, Key}).
 
-delete(Key, Node) ->
-    gen_server:call(Node, {delete, Key}).
+delete(Key) ->
+    gen_server:call(?MODULE, {delete, Key}).
 
-size(Node) ->
-    gen_server:call(Node, {size}).
+size() ->
+    gen_server:call(?MODULE, {size}).
 
 
 %% ============================================
