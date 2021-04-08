@@ -1,14 +1,19 @@
 # Key-Value-Store
 
-To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` & `kv_db_supervisor`
+This is a key-value store for doing basic CRUD operation using mnesia DBMS and gen_supervisor having multiple `gen_server` workers as per demand.
+
+To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` and `kv_db_supervisor` respectively.
 
 ## Instructions
 
-To start the Key-value store on a node, start erlang with a name and set the cookies. for example:
+To start the Key-value store on a node, start erlang with a name and set the cookies. For example:
 
+**Step-1**:
 `erl -sname alice -setcookies 1234`
+**Step-2**:
+Run `kv_db_supervisor:start_link_from_shell().`
 
-**From any running DB nodes**, run `kv_db_supervisor:start_link_from_shell().`, and you are ready to interact with the DB locally on the node, using the `kv_db_client`-file:
+**From any running servers**, you can also ready to interact with the DB locally on the node, using the `kv_db_client`-file:
 
 - `create/2`: Creates a new entry in the DataBase.
 - `update/2`: Updates an entry in the DataBase.
@@ -105,7 +110,7 @@ true
 
 ### Remote CRUD
 
-To connect a client to one of the servers start the erlang shell with a name, and same cookies as previously, and call the `kv_db_client:connect_client/1` to get a server assigned for further use:
+To connect a client to one of the servers start the erlang shell with a name, and same cookies as previously, and call the `kv_db_client:connect_client/1` to get a server assigned for further use. It is used to route client request randomly to any server so that one server doesn't take too much load.
 
 ```erlang
 > erl -sname hans -setcookies 1234
@@ -178,7 +183,7 @@ ok
 
 **Counting the number of instances in the DB:**
 
-`client Shell`
+`Client Shell`
 
 ```erlang
 (hans@DESKTOP-BCH0NID)6> kv_db_client:remote_size(Server).        
