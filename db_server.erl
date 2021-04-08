@@ -7,7 +7,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 %%Public
--export([put/3, get/2, delete/2, size/1]).
+-export([put/2, get/1, delete/1, size/0]).
 
 
 -record(state, {}).
@@ -39,7 +39,7 @@ size() ->
 %%          Call Back Functions
 %% ============================================
 
-init(_Args) -> 
+init(_Args) ->
     process_flag(trap_exit, true),
     io:format("~p (~p) starting...~n", [{local, ?MODULE}, self()]),
     db_logic:init(),
@@ -70,7 +70,7 @@ handle_call({size}, _From, State) ->
 handle_call( _Request, _From, State) ->
     {noreply, State}.
 
-handle_cast(_Request, State) -> 
+handle_cast(_Request, State) ->
     {noreply, State}.
 
 handle_info(_Info, State) ->
