@@ -2,39 +2,39 @@
 
 -export([create/2, update/2, get/1, delete/1, countKeys/0]).
 
+% -------------------------------------------
+% Internal Calls
+% -------------------------------------------
+
 % start() ->
 %     kv_db_server:start().
 % stop() ->
 %     kv_db_server:stop().
-
-% -------------------------------------------
-% Internal Calls
-% -------------------------------------------
 create(Key, Value) ->
     % kv_db_supervisor:startChild(Key),
-    db_server:put(Key, Value, Key).
+    db_server:put(Key, Value).
     % kv_db_supervisor:stopChild(Key).
 
 update(Key, Value) ->
     % kv_db_supervisor:startChild(Key),
-    db_server:delete(Key, Key),
-    db_server:put(Key, Value, Key).
+    db_server:delete(Key),
+    db_server:put(Key, Value).
     % kv_db_supervisor:stopChild(Key).
 
 get(Key) ->
     % kv_db_supervisor:startChild(Key),
-    db_server:get(Key, Key).
+    db_server:get(Key).
     % kv_db_supervisor:stopChild(Key),
     % Value.
 
 delete(Key) ->
     % kv_db_supervisor:startChild(Key),
-    db_server:delete(Key, Key).
+    db_server:delete(Key).
     % kv_db_supervisor:stopChild(Key).
 
 countKeys() ->
     % kv_db_supervisor:startChild(?MODULE),
-    db_server:size(?MODULE).
+    db_server:size().
     % kv_db_supervisor:stopChild(?MODULE),
     % Size.
 
