@@ -52,16 +52,16 @@ size() ->
 % STEP 3 Run "kv_db_supervisor:start_link_from_shell()."  from the "new node"
 % STEP 4 Access "new node" or any other replica from client node to do any CRUD operation
 addReplica(NodeName) ->
-
+    rpc:call(NodeName, db_logic, restartReplica, []),
     % add a node to Mnesia
     mnesia:change_config(extra_db_nodes, [NodeName]),
     % move the database schema to disc for the new node to make it persistent
     mnesia:change_table_copy_type(schema, NodeName, disc_copies),
     %To make new the node capable of storing disc copies
     mnesia:add_table_copy(kv_db, NodeName, disc_copies).
-%stop Mnesia on Nodename first and then call this method from any other running server node
+
 removeReplica(Nodename) ->
-    %Now switch to any other node in the cluster and do:
+    rpc:call(Nodename, mnesia, stop, []),
     mnesia:del_table_copy(schema, Nodename).
 
 
