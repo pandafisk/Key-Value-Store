@@ -43,7 +43,7 @@ Use the following functions from `kv_db_client`:
 
 `Shell 1`
 
-```shell
+```erlang
 >erl -sname alice -setcookies 1234
 
 (alice@DESKTOP-BCH0NID)1> kv_db_supervisor:start_link_from_shell().
@@ -55,13 +55,13 @@ true
 
 `Shell 2`
 
-```shell
+```erlang
 >erl -sname bob -setcookies 1234
 ```
 
 `Shell 1`
 
-```shell
+```erlang
 (alice@DESKTOP-BCH0NID)2> db_logic:addReplica('bob@DESKTOP-BCH0NID').
 
 {local,kv_db_supervisor} (<11631.107.0>) starting... 
@@ -75,7 +75,7 @@ The two nodes `alice@DESKTOP-BCH0NID` and `bob@DESKTOP-BCH0NID` are now connecte
 
 To remove a the second node (`bob@DESKTOP-BCH0NID`), in the shell of `alice@DESKTOP-BCH0NID`:
 
-```shell
+```erlang
 (alice@DESKTOP-BCH0NID)3> db_logic:removeReplica('bob@DESKTOP-BCH0NID').
 
 {atomic,ok}
@@ -93,7 +93,7 @@ ok
 
 If the erlang shell has been terminated, and the local files has not been removed manually, it can be restarted with:
 
-```shell
+```erlang
 > erl -sname bob -setcookies 1234
 
 (bob@DESKTOP-BCH0NID)1> db_logic:restartReplica().
@@ -120,14 +120,14 @@ To connect a client to one of the servers start the erlang shell with a name, an
 
 `Client Shell`
 
-```shell
+```erlang
 (hans@DESKTOP-BCH0NID)2> kv_db_client:remote_create(Server, age, 22).
 ok
 ```
 
 `Server Shell`
 
-```shell
+```erlang
 (bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) put {age,22} in DB
 ```
 
@@ -135,14 +135,14 @@ ok
 
 `Client Shell`
 
-```shell
+```erlang
 (hans@DESKTOP-BCH0NID)3> kv_db_client:remote_update(Server, age, 23).
 ok
 ```
 
 `Server Shell`
 
-```shell
+```erlang
 (bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) put {age,23} in DB
 ```
 
@@ -150,14 +150,14 @@ ok
 
 `Client Shell`
 
-```shell
+```erlang
 (hans@DESKTOP-BCH0NID)4> kv_db_client:remote_get(Server, age).    
 23
 ```
 
 `Server Shell`
 
-```shell
+```erlang
 (bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) GET 23
 ```
 
@@ -165,14 +165,14 @@ ok
 
 `Client Shell`
 
-```shell
+```erlang
 (hans@DESKTOP-BCH0NID)5> kv_db_client:remote_delete(Server, age). 
 ok
 ```
 
 `Server Shell`
 
-```shell
+```erlang
 (bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) Delete age from DB
 ```
 
@@ -180,13 +180,13 @@ ok
 
 `client Shell`
 
-```shell
+```erlang
 (hans@DESKTOP-BCH0NID)6> kv_db_client:remote_size(Server).        
 0
 ```
 
 `Server Shell`
 
-```shell
+```erlang
 db_server (<0.136.0>) Size: 0
 ```
