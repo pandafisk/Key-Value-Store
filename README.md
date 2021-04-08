@@ -38,9 +38,10 @@ Use the following functions from `kv_db_client`:
 - `remote_countKeys/1`: Returns the size of the DB. (`Server` must be any running server-node, such as one returned from `connect_client/1`)
 
 ## Examples
+
 (After compiling the files as described)
 
-### Starting two server nodes & connecting them:
+### Starting two server nodes & connecting them
 
 `Shell 1`
 
@@ -82,6 +83,112 @@ To remove a the second node (`bob@DESKTOP-BCH0NID`), in the shell of `alice@DESK
 {atomic,ok}
 ```
 
+### Restarting a server node
 
-- client operations
-- db add/remove
+If the erlang shell has not been terminated, the server can be restarted with
+
+```erlang
+(bob@DESKTOP-BCH0NID)1> mnesia:start().
+
+ok
+```
+
+If the erlang shell has been terminated, and the local files has not been removed manually, it can be restarted with:
+
+```shell
+> erl -sname bob -setcookies 1234
+
+(bob@DESKTOP-BCH0NID)1> db_logic:restartReplica().
+
+{local,kv_db_supervisor} (<0.135.0>) starting... 
+{local,db_server} (<0.136.0>) starting...
+true
+```
+
+### Remote CRUD
+
+To connect a client to one of the servers start the erlang shell with a name, and same cookies as previously, and call the `kv_db_client:connect_client/1` to get a server assigned for further use:
+
+```erlang
+> erl -sname hans -setcookies 1234
+
+(hans@DESKTOP-BCH0NID)1> Server = kv_db_client:connect_client('alice@DESKTOP-BCH0NID').
+'bob@DESKTOP-BCH0NID'
+```
+
+(Here we got `bob@DESKTOP-BCH0NID` assigned as our dedicated server)
+
+**Creating an entry:**
+
+`Client Shell`
+
+```shell
+(hans@DESKTOP-BCH0NID)2> kv_db_client:remote_create(Server, age, 22).
+ok
+```
+
+`Server Shell`
+
+```shell
+(bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) put {age,22} in DB
+```
+
+**Updating an entry:**
+
+`Client Shell`
+
+```shell
+(hans@DESKTOP-BCH0NID)3> kv_db_client:remote_update(Server, age, 23).
+ok
+```
+
+`Server Shell`
+
+```shell
+(bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) put {age,23} in DB
+```
+
+**Retrieving an entry:**
+
+`Client Shell`
+
+```shell
+(hans@DESKTOP-BCH0NID)4> kv_db_client:remote_get(Server, age).    
+23
+```
+
+`Server Shell`
+
+```shell
+(bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) GET 23
+```
+
+**Deleting an entry:**
+
+`Client Shell`
+
+```shell
+(hans@DESKTOP-BCH0NID)5> kv_db_client:remote_delete(Server, age). 
+ok
+```
+
+`Server Shell`
+
+```shell
+(bob@DESKTOP-BCH0NID)2> db_server (<0.136.0>) Delete age from DB
+```
+
+**Counting the number of instances in the DB:**
+
+`client Shell`
+
+```shell
+(hans@DESKTOP-BCH0NID)6> kv_db_client:remote_size(Server).        
+0
+```
+
+`Server Shell`
+
+```shell
+db_server (<0.136.0>) Size: 0
+```
