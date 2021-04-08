@@ -52,7 +52,7 @@ size() ->
 % STEP 3 Run "kv_db_supervisor:start_link_from_shell()."  from the "new node"
 % STEP 4 Access "new node" or any other replica from client node to do any CRUD operation
 addReplica(NodeName) ->
-
+    rpc:call(NodeName, db_logic, restartReplica, []),
     % add a node to Mnesia
     mnesia:change_config(extra_db_nodes, [NodeName]),
     % move the database schema to disc for the new node to make it persistent
