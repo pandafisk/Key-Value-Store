@@ -11,75 +11,68 @@
 %% ======================================================
 %%               Internal Calls
 %% ======================================================
+%% These function can only be called internally from a server-node
 
-% start() ->
-%     kv_db_server:start().
-% stop() ->
-%     kv_db_server:stop().
+%% Creates a new entry in the database
 create(Key, Value) ->
-    % kv_db_supervisor:startChild(Key),
     db_server:put(Key, Value).
-    % kv_db_supervisor:stopChild(Key).
 
+%% Updates an existing entry in the database. Calls the same logic-functin as `create`, but separated for 
+%% ease of use for the client  
 update(Key, Value) ->
-    % kv_db_supervisor:startChild(Key),
     db_server:delete(Key),
     db_server:put(Key, Value).
-    % kv_db_supervisor:stopChild(Key).
 
+%% Retrieves an entry from the database
 get(Key) ->
-    % kv_db_supervisor:startChild(Key),
     db_server:get(Key).
-    % kv_db_supervisor:stopChild(Key),
-    % Value.
 
+%% Deletes an entry in the database
 delete(Key) ->
-    % kv_db_supervisor:startChild(Key),
     db_server:delete(Key).
-    % kv_db_supervisor:stopChild(Key).
 
+%% Counts the number of keys in the system
 countKeys() ->
-    % kv_db_supervisor:startChild(?MODULE),
     db_server:size().
-    % kv_db_supervisor:stopChild(?MODULE),
-    % Size.
 
 %% ======================================================
 %%              Remote Calls
 %% ======================================================
+%% These functions are intended to be called from a remote client-node
+%% Can also be called from a server-node
 
+%% Creates a new entry in the database from a remote client-node
 remote_create(Server, Key, Value) ->
     rpc:call(Server, kv_db_client, create, [Key, Value]).
 
+%% Updates an existing entry in the database from a remote client-node.
+%% Calls the same logic-function as `remote_create`, but separated for ease of use for the client
 remote_update(Server, Key, Value) ->
     rpc:call(Server, kv_db_client, update, [Key, Value]).
 
+%% Retrieves an entry in the database from a remote client-node
 remote_get(Server, Key) ->
     rpc:call(Server, kv_db_client, get, [Key]).
 
+%% Deletes an entry in the database from a remote client-node
 remote_delete(Server, Key) ->
     rpc:call(Server, kv_db_client, delete, [Key]).
 
+%% Counts the number keys in the system from a remote client-node
 remote_size(Server) ->
     rpc:call(Server, kv_db_client, countKeys, []).
 
 %% ======================================================
 %%              Helpers
 %% ======================================================
+%% Helper functions to connect a client to the server
 
+%% Returns a running server to the client
 connect_client(Host) ->
     rpc:call(Host, kv_db_client, get_server, []).
 
+%% Selects a random node from one of the servers, to be used as dedicated server for a client
+%% Works as a load-balancer
 get_server() ->
     Servers = mnesia:table_info(kv_db, where_to_write),
     lists:nth(rand:uniform(length(Servers)), Servers).
-
-
-
-
-%% erl -sname 'server' -setcookies 1234
-%% kv_db_supervisor:start_link_from_shell().
-
-%%=========== In another shell ==============
-%% erl -sname 'client' -setcookies 1234
-%% rpc:call('name', kv_db_client, 'method', [Args]).
