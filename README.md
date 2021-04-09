@@ -1,17 +1,18 @@
 # Key-Value-Store
 
-This is a key-value store for doing basic CRUD operation using mnesia DBMS and gen_supervisor having multiple `gen_server` workers as per demand.
+This is a distributed and fault-tolerant key-value store for doing basic CRUD operation using mnesia DBMS and gen_supervisor having multiple `gen_server` workers as per demand.
 
-To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` and `kv_db_supervisor` respectively.
 
 ## Instructions
 
-To start the Key-value store on a node, start erlang with a name and set the cookies. For example:
+To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` and `kv_db_supervisor` respectively.
 
-**Step-1**:
-`erl -sname alice -setcookies 1234`
-**Step-2**:
-Run `kv_db_supervisor:start_link_from_shell().`
+To start the Key-value store on a node, start erlang with a name and set the cookies. For example:  
+  
+**Step-1**:  
+`erl -sname alice -setcookies 1234`  
+**Step-2**:  
+Run `kv_db_supervisor:start_link_from_shell().`  
 
 **From any running servers**, you can also ready to interact with the DB locally on the node, using the `kv_db_client`-file:
 
@@ -62,6 +63,8 @@ true
 
 ```erlang
 >erl -sname bob -setcookies 1234
+(bob@DESKTOP-BCH0NID)1> mnesia:start().
+ok
 ```
 
 `Shell 1`
@@ -96,7 +99,7 @@ If the erlang shell has not been terminated, the server can be restarted with
 ok
 ```
 
-If the erlang shell has been terminated, and the local files has not been removed manually, it can be restarted with:
+*If the erlang shell has been terminated*, and the local files has not been removed manually, it can be restarted with:
 
 ```erlang
 > erl -sname bob -setcookies 1234
@@ -110,7 +113,11 @@ true
 
 ### Remote CRUD
 
-To connect a client to one of the servers start the erlang shell with a name, and same cookies as previously, and call the `kv_db_client:connect_client/1` to get a server assigned for further use. It is used to route client request randomly to any server so that one server doesn't take too much load.
+For doing CRUD operation in the database, a client must be connected to a server that has a running DB node.
+
+To connect a client to one of the servers, it should have same cookies and call the `kv_db_client:connect_client/1` with a known server sname. In this way, the client node is not necessarily connecting to that server but it gets a server assigned randomly for further use. 
+
+In a nut shell, `kv_db_client:connect_client/1` method is used to get a server name randomly so that one server doesn't have to take too much load.
 
 ```erlang
 > erl -sname hans -setcookies 1234
