@@ -2,7 +2,6 @@
 
 This is a distributed and fault-tolerant key-value store for doing basic CRUD operation using mnesia DBMS and gen_supervisor having multiple `gen_server` workers as per demand.
 
-
 ## Instructions
 
 To run the code, compile the files, `db_logic`, `db_server`, `kv_db_client` and `kv_db_supervisor` respectively.
@@ -115,7 +114,7 @@ true
 
 For doing CRUD operation in the database, a client must be connected to a server that has a running DB node.
 
-To connect a client to one of the servers, it should have same cookies and call the `kv_db_client:connect_client/1` with a known server sname. In this way, the client node is not necessarily connecting to that server but it gets a server assigned randomly for further use. 
+To connect a client to one of the servers, it should have same cookies and call the `kv_db_client:connect_client/1` with a known server sname. In this way, the client node is not necessarily connecting to that server but it gets a server assigned randomly for further use.  
 
 In a nut shell, `kv_db_client:connect_client/1` method is used to get a server name randomly so that one server doesn't have to take too much load.
 
